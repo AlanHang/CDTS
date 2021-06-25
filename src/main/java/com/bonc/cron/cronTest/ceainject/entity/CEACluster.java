@@ -11,7 +11,7 @@ public class CEACluster extends CEAClusterStatusPO {
 
     private Map<String,String> clusterInfo;
 
-    public CEACluster(int ceaId, int clusterId, int clusterStatus, Map<String, String> clusterInfo) {
+    public CEACluster(int ceaId, String clusterId, int clusterStatus, Map<String, String> clusterInfo) {
         super(ceaId, clusterId, clusterStatus);
         this.clusterInfo = clusterInfo;
     }

@@ -13,6 +13,20 @@ public class PlanVO {
     //计划运行的状态
     private int planStatus;
 
+    public PlanVO(int planId, int planHistoryId, String planName, int planStatus) {
+        this.planId = planId;
+        this.planHistoryId = planHistoryId;
+        this.planName = planName;
+        this.planStatus = planStatus;
+    }
+
+    public PlanVO() {
+    }
+
+    public PlanVO(int planId) {
+        this.planId = planId;
+    }
+
     public int getPlanId() {
         return planId;
     }
@@ -43,5 +57,15 @@ public class PlanVO {
 
     public void setPlanStatus(int planStatus) {
         this.planStatus = planStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "PlanVO{" +
+                "planId=" + planId +
+                ", planHistoryId=" + planHistoryId +
+                ", planName='" + planName + '\'' +
+                ", planStatus=" + planStatus +
+                '}';
     }
 }

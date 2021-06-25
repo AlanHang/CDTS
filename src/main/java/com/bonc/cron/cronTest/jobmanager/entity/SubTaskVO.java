@@ -1,5 +1,7 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -8,12 +10,35 @@ import java.util.Date;
  */
 public class SubTaskVO {
     private String taskId;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     private ExecuteCondition condition;
     private int runStatus;
     private String executeLog;
     private String speed;
+
+    public SubTaskVO(String taskId, Date startTime, Date endTime, ExecuteCondition condition, int runStatus,
+                     String executeLog, String speed) {
+        this.taskId = taskId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.condition = condition;
+        this.runStatus = runStatus;
+        this.executeLog = executeLog;
+        this.speed = speed;
+    }
+
+    public SubTaskVO() {
+    }
+
+    public SubTaskVO(String taskId) {
+        this.taskId = taskId;
+        this.startTime = new Date();
+        this.endTime = new Date();
+        this.condition = new ExecuteCondition();
+    }
 
     public String getTaskId() {
         return taskId;
@@ -69,5 +94,18 @@ public class SubTaskVO {
 
     public void setSpeed(String speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public String toString() {
+        return "SubTaskVO{" +
+                "taskId='" + taskId + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", condition=" + condition +
+                ", runStatus=" + runStatus +
+                ", executeLog='" + executeLog + '\'' +
+                ", speed='" + speed + '\'' +
+                '}';
     }
 }

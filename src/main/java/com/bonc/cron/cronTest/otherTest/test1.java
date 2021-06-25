@@ -1,30 +1,37 @@
 package com.bonc.cron.cronTest.otherTest;
 
-import com.bonc.cron.cronTest.ceainject.entity.CEACluster;
-import com.bonc.cron.cronTest.jobmanager.CronParserUtil;
-import com.bonc.cron.cronTest.jobmanager.entity.CycleRules;
-import com.bonc.cron.cronTest.jobmanager.entity.JobInputInfoVO;
-import com.bonc.cron.cronTest.jobmanager.quartz.QuartzManager;
+
+import com.bonc.cron.cronTest.ceainject.entity.CEAInfoPO;
 
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author ZhengHang
  * @create 2021-06-10 15:57
  */
 public class test1 {
+
+    private static ExecutorService executorService = Executors.newFixedThreadPool(3);
+
     public static void main(String[] args) {
-        CEACluster c = new CEACluster();
-        c.setCeaId(1);
-        c.setClusterId(2);
-        System.out.println(c.getCeaId() + "  " + c.getClusterId());
-        System.out.println(QuartzManager.class.toString());
-        JobInputInfoVO info = new JobInputInfoVO();
-        info.setJobType(1);
-        CycleRules rules = new CycleRules();
-        rules.startTime = new Date();
-        rules.isEveryDay = true;
-        info.setRules(rules);
-        System.out.println(CronParserUtil.getCron(info));
+        for (int i = 0 ; i < 10 ; i++) {
+            CEAInfoPO ceaInfoPO = new CEAInfoPO( i,"123", "127.0.0.1:9372", new Date(), "test", 1);
+            String context = "context" + i;
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(Thread.currentThread().getName() +", ceaInfo = " + ceaInfoPO + ", context = " + context);
+                }
+            });
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        executorService.shutdown();
     }
 }

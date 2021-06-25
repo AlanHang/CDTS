@@ -51,4 +51,14 @@ public class ExecuteCondition {
     public void setFailCount(int failCount) {
         this.failCount = failCount;
     }
+
+    @Override
+    public String toString() {
+        return "ExecuteCondition{" +
+                "totalCount=" + totalCount +
+                ", finishCount=" + finishCount +
+                ", successCount=" + successCount +
+                ", failCount=" + failCount +
+                '}';
+    }
 }

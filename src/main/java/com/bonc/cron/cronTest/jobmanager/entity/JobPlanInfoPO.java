@@ -6,23 +6,23 @@ package com.bonc.cron.cronTest.jobmanager.entity;
  * @create 2021-06-10 9:38
  */
 public class JobPlanInfoPO {
-    private String jobId;
-    private String planId;
+    private int jobId;
+    private int planId;
     private String planOrder;
 
-    public String getJobId() {
+    public int getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(int jobId) {
         this.jobId = jobId;
     }
 
-    public String getPlanId() {
+    public int getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
+    public void setPlanId(int planId) {
         this.planId = planId;
     }
 

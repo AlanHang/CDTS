@@ -38,8 +38,8 @@ public class CronParserUtil {
             cron.append(separate);
             cron.append(calendar.get(Calendar.HOUR_OF_DAY));
             cron.append(separate);
-            if (rules.getRules().isMonday){//按月
-                cron.append(rules.getRules().dateOfMonth);
+            if (rules.getRules().isMonth){//按月
+                cron.append(rules.getRules().dayOfMonth);
                 cron.append(separate);
                 cron.append('*');
                 cron.append(separate);

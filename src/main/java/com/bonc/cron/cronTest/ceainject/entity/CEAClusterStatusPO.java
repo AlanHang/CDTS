@@ -7,10 +7,10 @@ package com.bonc.cron.cronTest.ceainject.entity;
  */
 public class CEAClusterStatusPO {
     protected int ceaId;
-    protected int clusterId;
+    protected String clusterId;
     protected int clusterStatus;
 
-    public CEAClusterStatusPO(int ceaId, int clusterId, int clusterStatus) {
+    public CEAClusterStatusPO(int ceaId, String clusterId, int clusterStatus) {
         this.ceaId = ceaId;
         this.clusterId = clusterId;
         this.clusterStatus = clusterStatus;
@@ -27,11 +27,11 @@ public class CEAClusterStatusPO {
         this.ceaId = ceaId;
     }
 
-    public int getClusterId() {
+    public String getClusterId() {
         return clusterId;
     }
 
-    public void setClusterId(int clusterId) {
+    public void setClusterId(String clusterId) {
         this.clusterId = clusterId;
     }
 

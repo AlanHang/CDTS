@@ -10,6 +10,7 @@ import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,24 +18,25 @@ import java.util.List;
  * @author ZhengHang
  * @create 2021-06-10 17:16
  */
+@Service
 public class JobManagerImpl implements JobManagerService {
 
     private static Logger log = LoggerFactory.getLogger(JobManagerImpl.class);
 
-    @Autowired
-    JobDao jobDao;
-
-    @Autowired
-    JobDetailsDao jobDetailsDao;
-
-    @Autowired
-    JobStrategyDao jobStrategyDao;
-
-    @Autowired
-    PlanOrderDao planOrderDao;
-
-    @Autowired
-    SubTaskDao subTaskDao;
+//    @Autowired
+//    JobDao jobDao;
+//
+//    @Autowired
+//    JobDetailsDao jobDetailsDao;
+//
+//    @Autowired
+//    JobStrategyDao jobStrategyDao;
+//
+//    @Autowired
+//    PlanOrderDao planOrderDao;
+//
+//    @Autowired
+//    SubTaskDao subTaskDao;
 
     @Override
     public boolean addJob(JobInputInfoVO jobInfo) {
@@ -42,7 +44,7 @@ public class JobManagerImpl implements JobManagerService {
     }
 
     @Override
-    public boolean deleteJob(String jobId) {
+    public boolean deleteJob(int jobId) {
         return false;
     }
 
@@ -58,33 +60,38 @@ public class JobManagerImpl implements JobManagerService {
 
 
     @Override
-    public List<JobHistoryVO> getHistoryJob(String jobId) {
+    public List<JobHistoryVO> getHistoryJob(int jobId) {
         return null;
     }
 
     @Override
-    public List<JobDetailsVO> getJobDetails(String jobId) {
+    public List<JobDetailsVO> getJobDetails(int jobId) {
         return null;
     }
 
     @Override
-    public List<JobDetailsVO> getJobHistoryDetails(int jobHistoryId) {
+    public List<JobDetailsVO> getJobHistoryDetails(String jobHistoryId) {
         return null;
     }
 
     @Override
-    public boolean startJob(String jobId) {
+    public boolean startJob(int jobId) {
         return false;
     }
 
     @Override
-    public boolean stopJob(String jobId) {
+    public boolean stopJob(int jobId) {
         return false;
     }
 
     @Override
-    public boolean purge(String jobId) {
+    public boolean purge(int jobId) {
         return false;
+    }
+
+    @Override
+    public JobInputInfoVO getJob(int jobId) {
+        return null;
     }
 
     //用于编辑时获取原有的job信息

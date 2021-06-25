@@ -13,18 +13,30 @@ import java.util.List;
  * @create 2021-06-10 15:52
  */
 public interface JobManagerService {
+
     boolean addJob(JobInputInfoVO jobInfo);
-    boolean deleteJob(String jobId);
+
+    boolean deleteJob(int jobId);
+
     boolean updateJob(JobInputInfoVO jobInfo);
+
     List<JobInfoVO> getAllJobInfo();
-    List<JobHistoryVO> getHistoryJob(String jobId);
+
+    List<JobHistoryVO> getHistoryJob(int jobId);
+
     //获取当前job执行详情
-    List<JobDetailsVO> getJobDetails(String jobId);
+    List<JobDetailsVO> getJobDetails(int jobId);
+
     //获取历史job执行详情
-    List<JobDetailsVO> getJobHistoryDetails(int jobHistoryId);
-    boolean startJob(String jobId);
-    boolean stopJob(String jobId);
-    boolean purge(String jobId);
-    JobInputInfoVO getJob(String jobId);
+    List<JobDetailsVO> getJobHistoryDetails(String jobHistoryId);
+
+    boolean startJob(int jobId);
+
+    boolean stopJob(int jobId);
+
+    boolean purge(int jobId);
+
+    JobInputInfoVO getJob(int jobId);
+
     void initSchedule() throws SchedulerException;
 }

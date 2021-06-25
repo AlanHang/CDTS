@@ -19,5 +19,7 @@ public enum ClusterKey {
     HDFS_SITE_FILE,
     HOST_IP_ADDRESS,
     HOST_USER,
-    HOST_PASSWORD;
+    HOST_PASSWORD,
+    ZOOKEEPER_ADDRESS,
+    CIRRO_VERSION;
 }

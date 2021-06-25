@@ -1,6 +1,10 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 接收从前端传入的Job信息
@@ -9,20 +13,17 @@ import java.util.Date;
  */
 public class JobInputInfoVO {
 
-    private String jobId;
+    private int jobId;
     private String jobName;
     private String jobRemark;
-    //标识job是否可用，0为可用，1为不可用
-    private int jobIsDel;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date jobCreateTime;
     //标识job运行的类型，0为单次job,1为周期性job
     private int jobType;
-    //标识job的状态，0为关闭，1为开启
-    private int jobStatus;
     //执行队列的名称
     private String jobQueueName;
     //子计划并行个数
-    private String subPlanAmounts;
+    private int subPlanAmounts;
     //忽略失败
     private boolean ignoreFails;
     //是否采用安全模式
@@ -35,17 +36,17 @@ public class JobInputInfoVO {
     private boolean isRunFails;
     //job周期执行策略
     private CycleRules rules;
+    //计划的执行顺序
+    private List<Integer> plansId;
 
-    public JobInputInfoVO(String jobId, String jobName, String jobRemark, int jobIsDel, Date jobCreateTime, int jobType,
-                          int jobStatus, String jobQueueName, String subPlanAmounts, boolean ignoreFails, boolean isSafe,
-                          boolean isFreeze, int retryCount, boolean isRunFails, CycleRules rules) {
+    public JobInputInfoVO(int jobId, String jobName, String jobRemark, Date jobCreateTime, int jobType,
+                          String jobQueueName, int subPlanAmounts, boolean ignoreFails, boolean isSafe,
+                          boolean isFreeze, int retryCount, boolean isRunFails, CycleRules rules,List<Integer> plansId) {
         this.jobId = jobId;
         this.jobName = jobName;
         this.jobRemark = jobRemark;
-        this.jobIsDel = jobIsDel;
         this.jobCreateTime = jobCreateTime;
         this.jobType = jobType;
-        this.jobStatus = jobStatus;
         this.jobQueueName = jobQueueName;
         this.subPlanAmounts = subPlanAmounts;
         this.ignoreFails = ignoreFails;
@@ -54,16 +55,25 @@ public class JobInputInfoVO {
         this.retryCount = retryCount;
         this.isRunFails = isRunFails;
         this.rules = rules;
+        this.plansId = plansId;
     }
 
     public JobInputInfoVO() {
     }
 
-    public String getJobId() {
+    public JobInputInfoVO(int jobId) {
+        this.jobId = jobId;
+        this.rules = new CycleRules();
+        this.rules.startTime = new Date();
+        this.jobCreateTime = new Date();
+        this.plansId = Arrays.asList(0,1,2,3);
+    }
+
+    public int getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(int jobId) {
         this.jobId = jobId;
     }
 
@@ -83,14 +93,6 @@ public class JobInputInfoVO {
         this.jobRemark = jobRemark;
     }
 
-    public int getJobIsDel() {
-        return jobIsDel;
-    }
-
-    public void setJobIsDel(int jobIsDel) {
-        this.jobIsDel = jobIsDel;
-    }
-
     public Date getJobCreateTime() {
         return jobCreateTime;
     }
@@ -107,14 +109,6 @@ public class JobInputInfoVO {
         this.jobType = jobType;
     }
 
-    public int getJobStatus() {
-        return jobStatus;
-    }
-
-    public void setJobStatus(int jobStatus) {
-        this.jobStatus = jobStatus;
-    }
-
     public String getJobQueueName() {
         return jobQueueName;
     }
@@ -123,11 +117,11 @@ public class JobInputInfoVO {
         this.jobQueueName = jobQueueName;
     }
 
-    public String getSubPlanAmounts() {
+    public int getSubPlanAmounts() {
         return subPlanAmounts;
     }
 
-    public void setSubPlanAmounts(String subPlanAmounts) {
+    public void setSubPlanAmounts(int subPlanAmounts) {
         this.subPlanAmounts = subPlanAmounts;
     }
 
@@ -177,5 +171,33 @@ public class JobInputInfoVO {
 
     public void setRules(CycleRules rules) {
         this.rules = rules;
+    }
+
+    public List<Integer> getPlansId() {
+        return plansId;
+    }
+
+    public void setPlansId(List<Integer> plansId) {
+        this.plansId = plansId;
+    }
+
+    @Override
+    public String toString() {
+        return "JobInputInfoVO{" +
+                "jobId='" + jobId + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", jobRemark='" + jobRemark + '\'' +
+                ", jobCreateTime=" + jobCreateTime +
+                ", jobType=" + jobType +
+                ", jobQueueName='" + jobQueueName + '\'' +
+                ", subPlanAmounts='" + subPlanAmounts + '\'' +
+                ", ignoreFails=" + ignoreFails +
+                ", isSafe=" + isSafe +
+                ", isFreeze=" + isFreeze +
+                ", retryCount=" + retryCount +
+                ", isRunFails=" + isRunFails +
+                ", rules=" + rules +
+                ", plansId=" + plansId +
+                '}';
     }
 }

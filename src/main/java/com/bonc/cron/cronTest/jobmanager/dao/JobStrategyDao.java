@@ -9,9 +9,14 @@ import java.util.List;
  * @create 2021-06-11 11:28
  */
 public interface JobStrategyDao {
+
     int addJobStrategy(List<JobStrategyInfoPO> strategy);
+
     int deleteJobStrategy(String jobId);
+
     int updateJobStrategy(List<JobStrategyInfoPO> strategy);
+
     List<JobStrategyInfoPO> selectAllJobStrategy(String jobId);
+
     String selectOneJobStrategy(String jobId , String Key);
 }

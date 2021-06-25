@@ -2,6 +2,7 @@ package com.bonc.cron.cronTest.test.mapper;
 
 import com.bonc.cron.cronTest.test.TaskDO;
 import com.bonc.cron.cronTest.test.TaskVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author ZhengHang
  * @create 2021-06-08 17:18
  */
+@Mapper
 public interface TaskMapper {
 
     TaskDO get(Long id);

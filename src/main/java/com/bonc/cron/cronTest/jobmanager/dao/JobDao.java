@@ -9,8 +9,12 @@ import java.util.List;
  * @create 2021-06-10 14:40
  */
 public interface JobDao {
+
     int addJobInfo(JobInfoPO jobInfo);
+
     int deleteJobInfo(String jobId);
+
     int updateJobInfo(JobInfoPO jobInfo);
+
     List<JobInfoPO> selectAllJobInfo();
 }

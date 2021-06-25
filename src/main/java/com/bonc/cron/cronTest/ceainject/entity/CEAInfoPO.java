@@ -7,13 +7,40 @@ import java.util.Date;
  * @author ZhengHang
  * @create 2021-06-07 15:59
  */
-public class CEAInfoPO {
+public class CEAInfoPO{
     private int id;
     private String name;
     private String ip;
     private Date createTime;
     private String remark;
     private int status;
+
+    public CEAInfoPO(int id, String name, String ip, Date createTime, String remark, int status) {
+        this.id = id;
+        this.name = name;
+        this.ip = ip;
+        this.createTime = createTime;
+        this.remark = remark;
+        this.status = status;
+    }
+
+    /**
+     * 给insert操作使用的构造类*/
+    public CEAInfoPO( String name, String ip, Date createTime, String remark, int status) {
+        this.name = name;
+        this.ip = ip;
+        this.createTime = createTime;
+        this.remark = remark;
+        this.status = status;
+    }
+
+    public CEAInfoPO(int id , int status){
+        this.id = id;
+        this.status = status;
+    }
+
+    public CEAInfoPO() {
+    }
 
     public int getId() {
         return id;
@@ -61,5 +88,17 @@ public class CEAInfoPO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "CEAInfoPO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", ip='" + ip + '\'' +
+                ", createTime=" + createTime +
+                ", remark='" + remark + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

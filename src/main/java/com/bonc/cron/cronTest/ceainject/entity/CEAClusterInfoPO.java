@@ -12,6 +12,16 @@ public class CEAClusterInfoPO {
     private String clusterKey;
     private String clusterValue;
 
+    public CEAClusterInfoPO(int ceaId, String clusterId, String clusterKey, String clusterValue) {
+        this.ceaId = ceaId;
+        this.clusterId = clusterId;
+        this.clusterKey = clusterKey;
+        this.clusterValue = clusterValue;
+    }
+
+    public CEAClusterInfoPO() {
+    }
+
     public int getCeaId() {
         return ceaId;
     }

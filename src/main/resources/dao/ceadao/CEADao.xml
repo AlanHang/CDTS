@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bonc.cron.cronTest.ceainject.dao">
+<mapper namespace="com.bonc.cron.cronTest.ceainject.dao.CEADao">
     <resultMap id="BaseResultMap" type="com.bonc.cron.cronTest.ceainject.entity.CEAInfoPO">
-        <result column="cea_id" property="id" jdbcType="INT"/>
+        <result column="cea_id" property="id" jdbcType="INTEGER"/>
         <result column="cea_name" property="name" jdbcType="VARCHAR"/>
         <result column="cea_ip" property="ip" jdbcType="VARCHAR"/>
-        <result column="cea_create_time" property="createTime" jdbcType="DATETIME"/>
+        <result column="cea_create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="cea_remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="cea_status" property="status" jdbcType="INT"/>
+        <result column="cea_status" property="status" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="BaseSql">cea_id,cea_name,cea_ip,cea_create_time,cea_remark,cea_status</sql>
 
     <insert id="addCEAInfo" parameterType="com.bonc.cron.cronTest.ceainject.entity.CEAInfoPO">
-        insert into CEA_INFO(cea_id,cea_name,cea_ip,cea_create_time,cea_remark,cea_status)
-        values(#{id,jdbcType=INT},#{name,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{createTime,jdbcType=DATETIME},
-        #{remark,jdbcType=VARCHAR},#{status,jdbcType=INT})
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into CEA_INFO(cea_name,cea_ip,cea_create_time,cea_remark,cea_status)
+        values(#{name,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
+        #{remark,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
     </insert>
 
-    <delete id="deleteCEAInfo" parameterType="int">
-        delete from CEA_INFO where cea_id = #{ceaId}
-    </delete>
+<!--    <delete id="deleteCEAInfo">-->
+<!--        delete from CEA_INFO where cea_id = #{ceaId}-->
+<!--    </delete>-->
+    <update id="deleteCEAInfo">
+        update CEA_INFO set cea_status = 2 WHERE cea_id = #{ceaId}
+    </update>
 
     <update id="updateCEAInfo" parameterType="com.bonc.cron.cronTest.ceainject.entity.CEAInfoPO">
         update CEA_INFO
         <set>
             <if test="name != null">
-                cea_name = #{name,jdbcType=VARCHAR}
+                cea_name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="ip != null">
-                cea_ip = #{ip,jdbcType=VARCHAR}
+                cea_ip = #{ip,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                cea_create_time = #{createTime,jdbcType=DATETIME}
+                cea_create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="remark != null">
-                cea_remark = #{remark,jdbcType=VARCHAR}
+                cea_remark = #{remark,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                cea_status = #{status,jdbcType=INT}
+                cea_status = #{status,jdbcType=INTEGER},
             </if>
         </set>
-        where cea_id = #{id,jdbcType=INT}
+        where cea_id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="selectAllCEAInfo" resultMap="BaseResultMap">
-        select <include refid="BaseSql"/> from CEA_INFO
+        select <include refid="BaseSql"/> from CEA_INFO where cea_status != 2
     </select>
 
-    <select id="selectOneCEAInfo" resultMap="BaseResultMap" parameterType="int">
-        select <include refid="BaseSql"/> from CEA_INFO where cea_id = #{id,jdbcType=INT}
+    <select id="selectOneCEAInfo" resultMap="BaseResultMap">
+        select <include refid="BaseSql"/> from CEA_INFO where cea_id = #{ceaId,jdbcType=INTEGER} AND cea_status != 2
     </select>
 
 </mapper>

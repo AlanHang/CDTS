@@ -1,6 +1,7 @@
 package com.bonc.cron.cronTest.ceainject.service;
 
 import com.bonc.cron.cronTest.ceainject.entity.CEAInfoVO;
+import com.bonc.cron.cronTest.result.Result;
 
 import java.util.List;
 
@@ -10,9 +11,16 @@ import java.util.List;
  * @create 2021-06-07 17:25
  */
 public interface CEAService {
-    boolean addCEA(CEAInfoVO info);
-    boolean deleteCEA(int ceaId);
-    boolean editCEA(CEAInfoVO info);
-    boolean refresh(CEAInfoVO info);
-    List<CEAInfoVO> getAllCEA();
+
+    Result<Boolean>  addCEA(CEAInfoVO info);
+
+    Result<Boolean> deleteCEA(int ceaId);
+
+    Result<Boolean> editCEA(CEAInfoVO info);
+
+    Result<Boolean> refresh(List<Integer> ceaIds);
+
+    Result<List<CEAInfoVO>> getAllCEA();
+
+    Result<CEAInfoVO> getOneCEA(int ceaId);
 }

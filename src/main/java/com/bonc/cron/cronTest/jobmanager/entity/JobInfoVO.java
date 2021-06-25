@@ -1,5 +1,7 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -7,25 +9,48 @@ import java.util.Date;
  * @create 2021-06-09 14:29
  */
 public class JobInfoVO {
-    private String jobId;
+    private int jobId;
     private String jobName;
     private String jobRemark;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date jobCreateTime;
     //标识job运行的类型，0为单次job,1为周期性job
     private int jobType;
     //执行策略
     private String strategy;
-    //标识job的状态，0为关闭，1为开启
+    //标识job的状态，0为关闭，1为开启，2为失败
     private int jobStatus;
     //job子任务的执行情况
     private ExecuteCondition condition;
     private long totalTime;
 
-    public String getJobId() {
+    public JobInfoVO(int jobId, String jobName, String jobRemark, Date jobCreateTime, int jobType, String strategy,
+                     int jobStatus, ExecuteCondition condition, long totalTime) {
+        this.jobId = jobId;
+        this.jobName = jobName;
+        this.jobRemark = jobRemark;
+        this.jobCreateTime = jobCreateTime;
+        this.jobType = jobType;
+        this.strategy = strategy;
+        this.jobStatus = jobStatus;
+        this.condition = condition;
+        this.totalTime = totalTime;
+    }
+
+    public JobInfoVO() {
+    }
+
+    public JobInfoVO(int jobId) {
+        this.jobId = jobId;
+        this.jobCreateTime = new Date();
+        this.condition = new ExecuteCondition();
+    }
+
+    public int getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(int jobId) {
         this.jobId = jobId;
     }
 

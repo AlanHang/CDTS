@@ -1,5 +1,6 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -7,25 +8,42 @@ import java.util.List;
  * @create 2021-06-10 10:22
  */
 public class JobDetailsVO {
-    private String jobId;
-    private int historyId;
+    private int jobId;
+    private String historyId;
     private List<PlanVO> plans;
     private int finishTime;
     private List<SubTaskVO> tasks;
 
-    public String getJobId() {
+    public JobDetailsVO(int jobId, String historyId, List<PlanVO> plans, int finishTime, List<SubTaskVO> tasks) {
+        this.jobId = jobId;
+        this.historyId = historyId;
+        this.plans = plans;
+        this.finishTime = finishTime;
+        this.tasks = tasks;
+    }
+
+    public JobDetailsVO() {
+    }
+
+    public JobDetailsVO(int jobId) {
+        this.jobId = jobId;
+        this.plans = Arrays.asList(new PlanVO(1),new PlanVO(2));
+        this.tasks = Arrays.asList(new SubTaskVO("1"),new SubTaskVO("2"));
+    }
+
+    public int getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(int jobId) {
         this.jobId = jobId;
     }
 
-    public int getHistoryId() {
+    public String getHistoryId() {
         return historyId;
     }
 
-    public void setHistoryId(int historyId) {
+    public void setHistoryId(String historyId) {
         this.historyId = historyId;
     }
 
@@ -51,5 +69,16 @@ public class JobDetailsVO {
 
     public void setTasks(List<SubTaskVO> tasks) {
         this.tasks = tasks;
+    }
+
+    @Override
+    public String toString() {
+        return "JobDetailsVO{" +
+                "jobId='" + jobId + '\'' +
+                ", historyId=" + historyId +
+                ", plans=" + plans +
+                ", finishTime=" + finishTime +
+                ", tasks=" + tasks +
+                '}';
     }
 }

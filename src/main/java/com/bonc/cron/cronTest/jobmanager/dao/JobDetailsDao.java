@@ -11,7 +11,10 @@ import java.util.List;
  * @create 2021-06-10 14:49
  */
 public interface JobDetailsDao {
+
     int selectJobHistoryId(String jobId);
+
     List<PlanVO> selectPlanQueue(int jobHistoryId);
+
     List<JobHistoryPO> selectJobHistory(String jobId);
 }
