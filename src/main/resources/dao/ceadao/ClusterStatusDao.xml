@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.ceainject.dao.ClusterStatusDao">
+    <resultMap id="BaseResultMap" type="com.bonc.cron.cronTest.ceainject.entity.CEAClusterStatusPO">
+        <result column="cea_id" property="ceaId" jdbcType="INTEGER"/>
+        <result column="cluster_id" property="clusterId" jdbcType="VARCHAR"/>
+        <result column="cluster_status" property="clusterStatus" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="BaseSql">cea_id,cluster_id,cluster_status</sql>
+
+    <insert id="addClusterStatus" parameterType="com.bonc.cron.cronTest.ceainject.entity.CEAClusterStatusPO">
+        insert into CEA_CLUSTER_STATUS(cea_id,cluster_id,cluster_status)
+        values (#{ceaId,jdbcType=INTEGER},#{clusterId,jdbcType=VARCHAR},#{clusterStatus,jdbcType=INTEGER})
+    </insert>
+
+<!--    <delete id="deleteClusterStatus">-->
+<!--        delete from CEA_CLUSTER_STATUS where cea_id=#{ceaId,jdbcType=INTEGER} and cluster_id=#{clusterId,jdbcType=VARCHAR}-->
+<!--    </delete>-->
+
+<!--    <delete id="deleteClusterStatusByCEAId">-->
+<!--        delete from CEA_CLUSTER_STATUS where cea_id=#{ceaId,jdbcType=INTEGER}-->
+<!--    </delete>-->
+
+    <update id="deleteClusterStatus">
+        UPDATE CEA_CLUSTER_STATUS SET cluster_status = 1 WHERE cea_id=#{ceaId,jdbcType=INTEGER} AND cluster_id=#{clusterId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="deleteClusterStatusByCEAId">
+        UPDATE CEA_CLUSTER_STATUS SET cluster_status = 1 WHERE cea_id=#{ceaId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateClusterStatus" parameterType="com.bonc.cron.cronTest.ceainject.entity.CEAClusterStatusPO">
+        update CEA_CLUSTER_STATUS
+        <set>
+            cluster_status = #{clusterStatus,jdbcType=INTEGER}
+        </set>
+        where cea_id = #{ceaId,jdbcType=INTEGER} and cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectAllClusterStatus" resultMap="BaseResultMap">
+        select <include refid="BaseSql"/> from CEA_CLUSTER_STATUS where cea_id = #{ceaId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOneClusterStatus" resultType="INT">
+        select cluster_status from CEA_CLUSTER_STATUS where cea_id = #{ceaId,jdbcType=INTEGER} and cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+</mapper>

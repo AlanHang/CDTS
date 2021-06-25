@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.ceainject.dao.CEAClusterInfoDao">
+    <resultMap id="BaseResultMap" type="com.bonc.cron.cronTest.ceainject.entity.CEAClusterInfoPO">
+        <result column="cea_id" property="ceaId" jdbcType="INTEGER"/>
+        <result column="cluster_id" property="clusterId" jdbcType="VARCHAR"/>
+        <result column="cluster_key" property="clusterKey" jdbcType="VARCHAR"/>
+        <result column="cluster_value" property="clusterValue" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="BaseSql">cea_id,cluster_id,cluster_key,cluster_value</sql>
+
+    <insert id="addClusterInfo" parameterType="java.util.List">
+        insert into CEA_CLUSTER_INFO(cea_id,cluster_id,cluster_key,cluster_value)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.ceaId,jdbcType=INTEGER},#{item.clusterId,jdbcType=VARCHAR},#{item.clusterKey,jdbcType=VARCHAR},
+            #{item.clusterValue,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+<!--    <delete id="deleteClusterInfo">-->
+<!--        delete from CEA_CLUSTER_INFO where cea_id=#{ceaId,jdbcType=INTEGER} and cluster_id=#{clusterId,jdbcType=VARCHAR}-->
+<!--    </delete>-->
+
+<!--    <delete id="deleteClusterInfoByCEAId">-->
+<!--        delete from CEA_CLUSTER_INFO where cea_id=#{ceaId,jdbcType=INTEGER}-->
+<!--    </delete>-->
+
+    <update id="updateClusterInfo" parameterType="java.util.List">
+        update CEA_CLUSTER_INFO
+        <trim prefix="set" suffixOverrides=",">
+            cluster_value =
+            <foreach collection="list" item="item" open="case" close="end,">
+                WHEN cea_id= #{item.ceaId,jdbcType=INTEGER} AND cluster_id= #{item.clusterId,jdbcType=VARCHAR}
+                AND cluster_key = #{item.clusterKey,jdbcType=VARCHAR}
+                THEN #{item.clusterValue,jdbcType=VARCHAR}
+            </foreach>
+        </trim>
+        WHERE
+        <foreach collection="list" item="item" open="(" separator=") or (" close=")">
+            cea_id= #{item.ceaId,jdbcType=INTEGER} and cluster_id= #{item.clusterId,jdbcType=VARCHAR}
+            and cluster_key = #{item.clusterKey,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <select id="selectAllClusterInfo" resultMap="BaseResultMap">
+        select
+        <include refid="BaseSql"/>
+        from CEA_CLUSTER_INFO where cea_id = #{ceaId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOneClusterInfo" resultMap="BaseResultMap">
+        select
+        <include refid="BaseSql"/>
+        from CEA_CLUSTER_INFO where cea_id = #{ceaId,jdbcType=INTEGER} and cluster_id = #{clusterId,jdbcType=VARCHAR}
+    </select>
+</mapper>
