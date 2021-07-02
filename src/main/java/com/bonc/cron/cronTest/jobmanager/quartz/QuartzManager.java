@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QuartzManager {
-    private final Logger log = LoggerFactory.getLogger(QuartzManager.class);
+    private static Logger log = LoggerFactory.getLogger(QuartzManager.class);
 
     @Autowired
     private Scheduler scheduler;

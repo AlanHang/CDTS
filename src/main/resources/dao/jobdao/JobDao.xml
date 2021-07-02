@@ -66,7 +66,7 @@
         <if test="condition != null and condition != ''">
             AND a.job_name LIKE CONCAT('%',#{condition,jdbcType=VARCHAR},'%')
         </if>
-        GROUP BY c.job_id
+        GROUP BY a.job_id
         <if test="order == 0">
             ORDER BY a.job_create_time ASC
         </if>

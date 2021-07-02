@@ -50,16 +50,20 @@ public class JobManagerController {
         Result<List<JobReturnVO>> allJobInfo = jobManagerService.getAllJobInfo(type, status, condition, order);
         PageInfo<JobReturnVO> resultPageInfo = new PageInfo<>(allJobInfo.getData());
         PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
-        return new Result<PageResult<JobReturnVO>>(allJobInfo.getCode(),allJobInfo.getMsg(),pageResult);
+        return new Result<>(allJobInfo.getCode(),allJobInfo.getMsg(),pageResult);
     }
 
     @GetMapping("/getJobHistory")
     Result<PageResult<JobHistoryVO>> getHistoryJob(int jobId, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         Result<List<JobHistoryVO>> historyJob = jobManagerService.getHistoryJob(jobId);
-        PageInfo<JobHistoryVO> resultPageInfo = new PageInfo<>(historyJob.getData());
-        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
-        return new Result<PageResult<JobHistoryVO>>(historyJob.getCode(),historyJob.getMsg(),pageResult);
+        if (historyJob.getCode() == 200) {
+            PageInfo<JobHistoryVO> resultPageInfo = new PageInfo<>(historyJob.getData());
+            PageResult<JobHistoryVO> pageResult = PageUtils.getPageResult(resultPageInfo);
+            return new Result<>(historyJob.getCode(), historyJob.getMsg(), pageResult);
+        }else {
+            return new Result<>(historyJob.getCode(), historyJob.getMsg(),null);
+        }
     }
 
     //获取当前job执行详情
@@ -79,9 +83,13 @@ public class JobManagerController {
     Result<PageResult<SubTaskVO>> getSubTasks(int planHistoryId, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         Result<List<SubTaskVO>> subTasks = jobManagerService.getSubTasks(planHistoryId);
-        PageInfo<SubTaskVO> resultPageInfo = new PageInfo<>(subTasks.getData());
-        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
-        return new Result<PageResult<SubTaskVO>>(subTasks.getCode(),subTasks.getMsg(),pageResult);
+        if (subTasks.getCode() == 200) {
+            PageInfo<SubTaskVO> resultPageInfo = new PageInfo<>(subTasks.getData());
+            PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
+            return new Result<>(subTasks.getCode(), subTasks.getMsg(), pageResult);
+        }{
+            return new Result<>(subTasks.getCode(), subTasks.getMsg(),null);
+        }
     }
 
     @PostMapping("/startJob")

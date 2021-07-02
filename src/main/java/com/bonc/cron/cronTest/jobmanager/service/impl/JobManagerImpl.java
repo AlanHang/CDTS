@@ -164,7 +164,7 @@ public class JobManagerImpl implements JobManagerService {
     @Override
     public Result<JobInputInfoVO> getJob(int jobId) {
         List<JobInfoPO> jobInfoPOS = jobDao.selectOneJobInfo(jobId);
-        if (jobInfoPOS == null && jobInfoPOS.size() == 0) {
+        if (jobInfoPOS == null || jobInfoPOS.size() == 0) {
             return new Result<>(400, "fail to find jobInfo", null);
         } else {
             JobInputInfoVO result = JavaBeanUtil.copyBean(jobInfoPOS.get(0), JobInputInfoVO.class);
@@ -198,7 +198,7 @@ public class JobManagerImpl implements JobManagerService {
     @Override
     public Result<List<JobReturnVO>> getAllJobInfo(int type , int status , String condition , int order) {
         List<JobReturnPO> jobReturnPOS = jobDao.selectAllReturnJobInfo(type,status,condition,order);
-        if (jobReturnPOS == null && jobReturnPOS.size() == 0) {
+        if (jobReturnPOS == null || jobReturnPOS.size() == 0) {
             return new Result<>(400, "fail to find jobInfo", null);
         } else {
             List<JobReturnVO> result = new ArrayList<>(jobReturnPOS.size());
