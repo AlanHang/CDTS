@@ -1,11 +1,16 @@
 package com.bonc.cron.cronTest.jobmanager.controller;
 
 import com.bonc.cron.cronTest.jobmanager.entity.*;
+import com.bonc.cron.cronTest.jobmanager.service.JobManagerService;
+import com.bonc.cron.cronTest.result.JobDetailResult;
 import com.bonc.cron.cronTest.result.PageResult;
 import com.bonc.cron.cronTest.result.Result;
+import com.bonc.cron.cronTest.utils.PageUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,68 +20,82 @@ import java.util.List;
 @RestController
 @RequestMapping("/jobManger")
 public class JobManagerController {
+
+    @Autowired
+    JobManagerService jobManagerService;
+
     @PostMapping("/addJob")
     Result<Boolean> addJob(@RequestBody JobInputInfoVO jobInfo){
-        System.out.println("进入add");
-        System.out.println(jobInfo);
-        System.out.println("显示时间："+jobInfo.getRules().startTime);
-        return null;
+        return jobManagerService.addJob(jobInfo);
     }
+
     @PostMapping("/deleteJob")
     Result<Boolean> deleteJob(int jobId){
-        return null;
+        return jobManagerService.deleteJob(jobId);
     }
+
     @PostMapping("/updateJob")
-    Result<Boolean> updateJob(JobInputInfoVO jobInfo){
-        return null;
+    Result<Boolean> updateJob(@RequestBody JobInputInfoVO jobInfo){
+        return jobManagerService.updateJob(jobInfo);
     }
+
     @GetMapping("/getJob")
     Result<JobInputInfoVO> getJob(int jobId){
-        return new Result<>(200,"success",new JobInputInfoVO(jobId));
+        return jobManagerService.getJob(jobId);
     }
+
     @GetMapping("/getAllJob")
-    Result<PageResult<JobInfoVO>> getAllJobInfo(int type , int status , String condition , int order , int pageNum , int pageSize){
-        PageResult pageResult = new PageResult(1,2,20,10);
-        pageResult.setContent(Arrays.asList(new JobInfoVO(0),new JobInfoVO(1)));
-        return new Result<PageResult<JobInfoVO>>(200,"success",pageResult);
+    Result<PageResult<JobReturnVO>> getAllJobInfo(int type , int status , String condition , int order , int pageNum , int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        Result<List<JobReturnVO>> allJobInfo = jobManagerService.getAllJobInfo(type, status, condition, order);
+        PageInfo<JobReturnVO> resultPageInfo = new PageInfo<>(allJobInfo.getData());
+        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
+        return new Result<PageResult<JobReturnVO>>(allJobInfo.getCode(),allJobInfo.getMsg(),pageResult);
     }
+
     @GetMapping("/getJobHistory")
-    Result<PageResult<JobHistoryVO>> getHistoryJob(int jobId,int pageSize , int page){
-        PageResult pageResult = new PageResult(1,2,20,10);
-        pageResult.setContent(Arrays.asList(new JobHistoryVO("0dsafc"),new JobHistoryVO("1dafg")));
-        return new Result<PageResult<JobHistoryVO>>(200,"success",pageResult);
+    Result<PageResult<JobHistoryVO>> getHistoryJob(int jobId, int pageNum, int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        Result<List<JobHistoryVO>> historyJob = jobManagerService.getHistoryJob(jobId);
+        PageInfo<JobHistoryVO> resultPageInfo = new PageInfo<>(historyJob.getData());
+        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
+        return new Result<PageResult<JobHistoryVO>>(historyJob.getCode(),historyJob.getMsg(),pageResult);
     }
+
     //获取当前job执行详情
     @GetMapping("/getJobDetail")
-    Result<PageResult<JobDetailsVO>> getJobDetails(int jobId , int pageSize , int page){
-        PageResult pageResult = new PageResult(1,2,20,10);
-        pageResult.setContent(Arrays.asList(new JobDetailsVO(1)));
-        return new Result<PageResult<JobDetailsVO>>(200,"success",pageResult);
+    Result<JobDetailResult> getJobDetails(int jobId , int pageNum, int pageSize){
+        return jobManagerService.getJobDetails(jobId,pageNum,pageSize);
     }
+
     //获取历史job执行详情
     @GetMapping("/getHistoryDetail")
-    Result<PageResult<JobDetailsVO>> getJobHistoryDetails(String jobHistoryId,int pageSize , int page){
-        return null;
+    Result<JobDetailResult> getJobHistoryDetails(String jobHistoryId, int pageNum, int pageSize){
+        return jobManagerService.getJobHistoryDetails(jobHistoryId,pageNum,pageSize);
     }
 
     //获取子任务详情
     @GetMapping("/getTasks")
-    Result<PageResult<SubTaskVO>> getSubTasks(String historyId , int planHistoryId, int pageSize , int page){
-        PageResult pageResult = new PageResult(1,2,20,10);
-        pageResult.setContent(Arrays.asList(new SubTaskVO("1"),new SubTaskVO("2")));
-        return new Result<PageResult<SubTaskVO>>(200,"success",pageResult);
+    Result<PageResult<SubTaskVO>> getSubTasks(int planHistoryId, int pageNum, int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        Result<List<SubTaskVO>> subTasks = jobManagerService.getSubTasks(planHistoryId);
+        PageInfo<SubTaskVO> resultPageInfo = new PageInfo<>(subTasks.getData());
+        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
+        return new Result<PageResult<SubTaskVO>>(subTasks.getCode(),subTasks.getMsg(),pageResult);
     }
 
     @PostMapping("/startJob")
     Result<Boolean> startJob(int jobId){
-        return null;
+        return jobManagerService.startJob(jobId);
     }
+
     @PostMapping("/stopJob")
     Result<Boolean> stopJob(int jobId){
-        return null;
+        return jobManagerService.stopJob(jobId);
     }
+
     @PostMapping("/purgeJob")
     Result<Boolean> purge(int jobId){
-        return null;
+        return jobManagerService.purge(jobId);
     }
 }

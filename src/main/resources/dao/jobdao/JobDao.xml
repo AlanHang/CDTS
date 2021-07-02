@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.jobmanager.dao.JobDao">
+
+    <sql id="BaseSql">job_id,job_name,job_remark,job_create_time,job_type,job_status,job_queue_name</sql>
+
+    <insert id="addJobInfo" parameterType="com.bonc.cron.cronTest.jobmanager.entity.JobInfoPO">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="jobId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO JOB_INFO(job_name,job_remark,job_is_del,job_create_time,job_type,job_status,job_queue_name)
+        VALUES (
+        #{jobName,jdbcType=VARCHAR},#{jobRemark,jdbcType=VARCHAR},#{jobIsDel,jdbcType=INTEGER},
+        #{jobCreateTime,jdbcType=TIMESTAMP}, #{jobType,jdbcType=INTEGER},#{jobStatus,jdbcType=INTEGER},
+        #{jobQueueName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="deleteJobInfo">
+        UPDATE JOB_INFO SET job_is_del = 1 WHERE job_id = #{jobId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateJobInfo" parameterType="com.bonc.cron.cronTest.jobmanager.entity.JobInfoPO">
+        UPDATE JOB_INFO
+        <set>
+            <if test="jobName != null">
+                job_name = #{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="jobRemark != null">
+                job_remark = #{jobRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="jobCreateTime != null">
+                job_create_time = #{jobCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="jobType != null">
+                job_type = #{jobType,jdbcType=INTEGER},
+            </if>
+            <if test="jobStatus != null">
+                job_status = #{jobStatus,jdbcType=INTEGER},
+            </if>
+            <if test="jobIsDel != null">
+                job_is_del = #{jobIsDel,jdbcType=INTEGER},
+            </if>
+            <if test="jobQueueName != null">
+                job_queue_name = #{jobQueueName,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE job_id = #{jobId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllReturnJobInfo" resultType="com.bonc.cron.cronTest.jobmanager.entity.JobReturnPO">
+        SELECT a.job_id,a.job_name,a.job_remark,a.job_create_time,a.job_type,a.job_status,a.job_queue_name,c.job_his_id,c.start_time,c.complete_detail,c.end_time
+        FROM job_info a LEFT JOIN
+        (SELECT b.job_id,b.start_time,b.complete_detail,b.end_time,b.job_his_id
+        FROM job_history b
+        ORDER BY b.start_time DESC
+        ) c
+        ON a.job_id = c.job_id
+        WHERE job_is_del = 0
+        <if test="type != 2" >
+            AND a.job_type = #{type}
+        </if>
+        <if test="status != 3">
+            AND a.job_status = #{status}
+        </if>
+        <if test="condition != null and condition != ''">
+            AND a.job_name LIKE CONCAT('%',#{condition,jdbcType=VARCHAR},'%')
+        </if>
+        GROUP BY c.job_id
+        <if test="order == 0">
+            ORDER BY a.job_create_time ASC
+        </if>
+
+        <if test="order == 1">
+            ORDER BY a.job_create_time DESC
+        </if>
+    </select>
+
+    <select id="selectAllJobInfo" resultType="com.bonc.cron.cronTest.jobmanager.entity.JobInfoPO">
+        SELECT <include refid="BaseSql"/> FROM JOB_INFO WHERE job_is_del = 0
+    </select>
+
+    <select id="selectOneJobInfo" resultType="com.bonc.cron.cronTest.jobmanager.entity.JobInfoPO">
+        SELECT <include refid="BaseSql"/> FROM JOB_INFO WHERE job_is_del = 0 AND job_id = #{jobId,jdbcType=INTEGER}
+    </select>
+
+</mapper>

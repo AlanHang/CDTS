@@ -2,6 +2,7 @@ package com.bonc.cron.cronTest.jobmanager.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -187,7 +188,7 @@ public class JobInputInfoVO {
                 "jobId='" + jobId + '\'' +
                 ", jobName='" + jobName + '\'' +
                 ", jobRemark='" + jobRemark + '\'' +
-                ", jobCreateTime=" + jobCreateTime +
+                ", jobCreateTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobCreateTime) +
                 ", jobType=" + jobType +
                 ", jobQueueName='" + jobQueueName + '\'' +
                 ", subPlanAmounts='" + subPlanAmounts + '\'' +

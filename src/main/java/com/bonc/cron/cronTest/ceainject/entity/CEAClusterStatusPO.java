@@ -42,4 +42,13 @@ public class CEAClusterStatusPO {
     public void setClusterStatus(int clusterStatus) {
         this.clusterStatus = clusterStatus;
     }
+
+    @Override
+    public String toString() {
+        return "CEAClusterStatusPO{" +
+                "ceaId=" + ceaId +
+                ", clusterId='" + clusterId + '\'' +
+                ", clusterStatus=" + clusterStatus +
+                '}';
+    }
 }

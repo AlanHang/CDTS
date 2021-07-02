@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.jobmanager.dao.PlanOrderDao">
+
+    <insert id="addPlanOrder" parameterType="com.bonc.cron.cronTest.jobmanager.entity.JobPlanInfoPO">
+        INSERT INTO JOB_PLAN_INFO(job_id,plan_id,plan_order)
+        VALUES(#{jobId},#{planId},#{planOrder})
+    </insert>
+    <delete id="deletePlanOrder">
+        DELETE FROM JOB_PLAN_INFO WHERE job_id = #{jobId} AND plan_id = #{planId}
+    </delete>
+
+    <select id="selectMaxPlanOrder" parameterType="com.bonc.cron.cronTest.jobmanager.entity.JobPlanInfoPO" resultType="java.lang.Integer">
+        SELECT plan_order
+        FROM JOB_PLAN_INFO
+        WHERE
+        job_id = #{jobId} AND plan_id = #{planId}
+        ORDER BY plan_order DESC limit 1
+    </select>
+
+    <insert id="addPlanOrderByJob">
+        INSERT INTO JOB_PLAN_INFO(job_id,plan_id,plan_order)
+        VALUES
+        <foreach collection="planIds" item="item" separator="," index="index">
+            (#{jobId},#{item},#{index}+1)
+        </foreach>
+    </insert>
+
+    <delete id="deletePlanOrderByJobId">
+        DELETE FROM JOB_PLAN_INFO WHERE job_id = #{jobId}
+    </delete>
+
+    <select id="selectAllByJobId" resultType="java.lang.Integer">
+        SELECT plan_id FROM JOB_PLAN_INFO WHERE job_id = #{jobId} ORDER BY plan_order ASC
+    </select>
+
+
+</mapper>

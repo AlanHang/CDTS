@@ -1,5 +1,6 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,20 +8,27 @@ import java.util.Date;
  * @create 2021-06-10 10:28
  */
 public class SubTaskPO {
-    private String taskId;
+
+    private String applicationId;
+
     private Date startTime;
+
     private Date endTime;
-    private String completeDetails;
-    private int runStatus;
-    private String executeLog;
+
+    private String completeDetail;
+
+    private Integer runStatus;
+
+    private String log;
+
     private String speed;
 
-    public String getTaskId() {
-        return taskId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 
     public Date getStartTime() {
@@ -39,12 +47,12 @@ public class SubTaskPO {
         this.endTime = endTime;
     }
 
-    public String getCompleteDetails() {
-        return completeDetails;
+    public String getCompleteDetail() {
+        return completeDetail;
     }
 
-    public void setCompleteDetails(String completeDetails) {
-        this.completeDetails = completeDetails;
+    public void setCompleteDetail(String completeDetail) {
+        this.completeDetail = completeDetail;
     }
 
     public int getRunStatus() {
@@ -55,12 +63,16 @@ public class SubTaskPO {
         this.runStatus = runStatus;
     }
 
-    public String getExecuteLog() {
-        return executeLog;
+    public void setRunStatus(Integer runStatus) {
+        this.runStatus = runStatus;
     }
 
-    public void setExecuteLog(String executeLog) {
-        this.executeLog = executeLog;
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 
     public String getSpeed() {
@@ -69,5 +81,32 @@ public class SubTaskPO {
 
     public void setSpeed(String speed) {
         this.speed = speed;
+    }
+
+    public SubTaskPO(String applicationId, Date startTime, Date endTime, String completeDetail, Integer runStatus,
+                     String log, String speed) {
+        this.applicationId = applicationId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.completeDetail = completeDetail;
+        this.runStatus = runStatus;
+        this.log = log;
+        this.speed = speed;
+    }
+
+    public SubTaskPO() {
+    }
+
+    @Override
+    public String toString() {
+        return "SubTaskPO{" +
+                "taskId='" + applicationId + '\'' +
+                ", startTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) +
+                ", endTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime) +
+                ", completeDetail='" + completeDetail + '\'' +
+                ", runStatus=" + runStatus +
+                ", log='" + log + '\'' +
+                ", speed='" + speed + '\'' +
+                '}';
     }
 }

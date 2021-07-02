@@ -1,5 +1,6 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,26 +8,41 @@ import java.util.Date;
  * @create 2021-06-10 9:36
  */
 public class JobHistoryPO {
-    private int jobHistoryId;
-    private String jobId;
+
+    private String jobHisId;
+
+    private Integer jobId;
+
     private Date startTime;
-    private Date endTime;
+
+    private String completeDetail;
+
     //0表示运行成功，1表示运行失败
-    private int runStatus;
+    private Integer runStatus;
 
-    public int getJobHistoryId() {
-        return jobHistoryId;
+    public JobHistoryPO(String jobHisId, Integer jobId, Date startTime, String completeDetail, Integer runStatus) {
+        this.jobHisId = jobHisId;
+        this.jobId = jobId;
+        this.startTime = startTime;
+        this.completeDetail = completeDetail;
+        this.runStatus = runStatus;
     }
 
-    public void setJobHistoryId(int jobHistoryId) {
-        this.jobHistoryId = jobHistoryId;
+    public JobHistoryPO(String jobHisId, Date startTime, String completeDetail, Integer runStatus) {
+        this.jobHisId = jobHisId;
+        this.startTime = startTime;
+        this.completeDetail = completeDetail;
+        this.runStatus = runStatus;
     }
 
-    public String getJobId() {
+    public JobHistoryPO() {
+    }
+
+    public Integer getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(Integer jobId) {
         this.jobId = jobId;
     }
 
@@ -38,19 +54,39 @@ public class JobHistoryPO {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public String getJobHisId() {
+        return jobHisId;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setJobHisId(String jobHisId) {
+        this.jobHisId = jobHisId;
     }
 
-    public int getRunStatus() {
+    public String getCompleteDetail() {
+        return completeDetail;
+    }
+
+    public void setCompleteDetail(String completeDetail) {
+        this.completeDetail = completeDetail;
+    }
+
+    public Integer getRunStatus() {
         return runStatus;
     }
 
-    public void setRunStatus(int runStatus) {
+    public void setRunStatus(Integer runStatus) {
         this.runStatus = runStatus;
+    }
+
+
+    @Override
+    public String toString() {
+        return "JobHistoryPO{" +
+                "jobHisId='" + jobHisId + '\'' +
+                ", jobId=" + jobId +
+                ", startTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime)  +
+                ", completeDetail='" + completeDetail + '\'' +
+                ", runStatus=" + runStatus +
+                '}';
     }
 }

@@ -5,16 +5,16 @@ package com.bonc.cron.cronTest.jobmanager.entity;
  * @create 2021-06-09 14:32
  */
 public class JobStrategyInfoPO {
-    private String jobId;
+    private Integer jobId;
     //对应StrategyKey枚举类中的name值
     private String jobStrategyKey;
     private String jobStrategyValue;
 
-    public String getJobId() {
+    public Integer getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+    public void setJobId(Integer jobId) {
         this.jobId = jobId;
     }
 
@@ -32,5 +32,23 @@ public class JobStrategyInfoPO {
 
     public void setJobStrategyValue(String jobStrategyValue) {
         this.jobStrategyValue = jobStrategyValue;
+    }
+
+    public JobStrategyInfoPO(Integer jobId, String jobStrategyKey, String jobStrategyValue) {
+        this.jobId = jobId;
+        this.jobStrategyKey = jobStrategyKey;
+        this.jobStrategyValue = jobStrategyValue;
+    }
+
+    public JobStrategyInfoPO() {
+    }
+
+    @Override
+    public String toString() {
+        return "JobStrategyInfoPO{" +
+                "jobId=" + jobId +
+                ", jobStrategyKey='" + jobStrategyKey + '\'' +
+                ", jobStrategyValue='" + jobStrategyValue + '\'' +
+                '}';
     }
 }

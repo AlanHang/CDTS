@@ -25,11 +25,6 @@ public class JobDetailsVO {
     public JobDetailsVO() {
     }
 
-    public JobDetailsVO(int jobId) {
-        this.jobId = jobId;
-        this.plans = Arrays.asList(new PlanVO(1),new PlanVO(2));
-        this.tasks = Arrays.asList(new SubTaskVO("1"),new SubTaskVO("2"));
-    }
 
     public int getJobId() {
         return jobId;

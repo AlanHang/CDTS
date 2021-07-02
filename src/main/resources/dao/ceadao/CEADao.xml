@@ -24,7 +24,7 @@
 <!--        delete from CEA_INFO where cea_id = #{ceaId}-->
 <!--    </delete>-->
     <update id="deleteCEAInfo">
-        update CEA_INFO set cea_status = 2 WHERE cea_id = #{ceaId}
+        update CEA_INFO set cea_status = 2 WHERE cea_id = #{ceaId,jdbcType=INTEGER}
     </update>
 
     <update id="updateCEAInfo" parameterType="com.bonc.cron.cronTest.ceainject.entity.CEAInfoPO">

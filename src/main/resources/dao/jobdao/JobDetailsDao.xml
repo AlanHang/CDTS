@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.jobmanager.dao.JobDetailsDao">
+
+    <select id="selectJobHistoryId" resultType="java.lang.String">
+        SELECT job_his_id FROM JOB_HISTORY WHERE job_id = #{jobId} ORDER BY start_time DESC LIMIT 1
+    </select>
+
+    <select id="selectPlanQueue" resultType="com.bonc.cron.cronTest.jobmanager.entity.PlanVO">
+        SELECT plan_id,plan_his_id,plan_name,run_status FROM PLAN_HISTORY WHERE job_his_id = #{jobHistoryId} ORDER BY plan_order ASC
+    </select>
+
+    <select id="selectJobHistory" resultType="com.bonc.cron.cronTest.jobmanager.entity.JobHistoryPO">
+        SELECT job_his_id,start_time,complete_detail,run_status FROM JOB_HISTORY WHERE job_id = #{jobId}
+    </select>
+
+
+</mapper>

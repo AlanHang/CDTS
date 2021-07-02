@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.cron.cronTest.jobmanager.dao.JobStrategyDao">
+
+    <insert id="addJobStrategy">
+        INSERT INTO JOB_STRATEGY_INFO(job_id,job_strategy_key,job_strategy_value)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.jobId},#{item.jobStrategyKey},#{item.jobStrategyValue})
+        </foreach>
+    </insert>
+
+    <update id="updateJobStrategy">
+        UPDATE JOB_STRATEGY_INFO
+        <trim prefix="set" suffixOverrides=",">
+            job_strategy_value =
+            <foreach collection="list" item="item" open="case" close="end,">
+                WHEN job_id= #{item.jobId} AND job_strategy_key = #{item.jobStrategyKey}
+                THEN #{item.jobStrategyValue}
+            </foreach>
+        </trim>
+        WHERE
+        <foreach collection="list" item="item" open="(" separator=") or (" close=")">
+            job_id= #{item.jobId} AND job_strategy_key = #{item.jobStrategyKey}
+        </foreach>
+    </update>
+
+    <select id="selectAllJobStrategy" resultType="com.bonc.cron.cronTest.jobmanager.entity.JobStrategyInfoPO">
+        SELECT job_id,job_strategy_key,job_strategy_value FROM JOB_STRATEGY_INFO WHERE job_id = #{jobId}
+    </select>
+
+    <select id="selectOneJobStrategy" resultType="java.lang.String">
+        SELECT job_strategy_value FROM JOB_STRATEGY_INFO WHERE job_id = #{jobId} AND job_strategy_key = #{key}
+    </select>
+
+
+</mapper>

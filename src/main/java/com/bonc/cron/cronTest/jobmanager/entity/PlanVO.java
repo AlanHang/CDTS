@@ -1,23 +1,21 @@
 package com.bonc.cron.cronTest.jobmanager.entity;
 
-import java.util.List;
-
 /**
  * @author ZhengHang
  * @create 2021-06-10 10:24
  */
 public class PlanVO {
     private int planId;
-    private int planHistoryId;
+    private int planHisId;
     private String planName;
     //计划运行的状态
-    private int planStatus;
+    private int runStatus;
 
-    public PlanVO(int planId, int planHistoryId, String planName, int planStatus) {
+    public PlanVO(int planId, int planHisId, String planName, int runStatus) {
         this.planId = planId;
-        this.planHistoryId = planHistoryId;
+        this.planHisId = planHisId;
         this.planName = planName;
-        this.planStatus = planStatus;
+        this.runStatus = runStatus;
     }
 
     public PlanVO() {
@@ -35,12 +33,20 @@ public class PlanVO {
         this.planId = planId;
     }
 
-    public int getPlanHistoryId() {
-        return planHistoryId;
+    public int getPlanHisId() {
+        return planHisId;
     }
 
-    public void setPlanHistoryId(int planHistoryId) {
-        this.planHistoryId = planHistoryId;
+    public void setPlanHisId(int planHisId) {
+        this.planHisId = planHisId;
+    }
+
+    public int getRunStatus() {
+        return runStatus;
+    }
+
+    public void setRunStatus(int runStatus) {
+        this.runStatus = runStatus;
     }
 
     public String getPlanName() {
@@ -51,21 +57,14 @@ public class PlanVO {
         this.planName = planName;
     }
 
-    public int getPlanStatus() {
-        return planStatus;
-    }
-
-    public void setPlanStatus(int planStatus) {
-        this.planStatus = planStatus;
-    }
 
     @Override
     public String toString() {
         return "PlanVO{" +
                 "planId=" + planId +
-                ", planHistoryId=" + planHistoryId +
+                ", planHisId=" + planHisId +
                 ", planName='" + planName + '\'' +
-                ", planStatus=" + planStatus +
+                ", runStatus=" + runStatus +
                 '}';
     }
 }

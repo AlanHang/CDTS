@@ -1,9 +1,8 @@
 package com.bonc.cron.cronTest.jobmanager.service;
 
-import com.bonc.cron.cronTest.jobmanager.entity.JobDetailsVO;
-import com.bonc.cron.cronTest.jobmanager.entity.JobHistoryVO;
-import com.bonc.cron.cronTest.jobmanager.entity.JobInfoVO;
-import com.bonc.cron.cronTest.jobmanager.entity.JobInputInfoVO;
+import com.bonc.cron.cronTest.jobmanager.entity.*;
+import com.bonc.cron.cronTest.result.JobDetailResult;
+import com.bonc.cron.cronTest.result.Result;
 import org.quartz.SchedulerException;
 
 import java.util.List;
@@ -14,29 +13,31 @@ import java.util.List;
  */
 public interface JobManagerService {
 
-    boolean addJob(JobInputInfoVO jobInfo);
+    Result<Boolean> addJob(JobInputInfoVO jobInfo);
 
-    boolean deleteJob(int jobId);
+    Result<Boolean> deleteJob(int jobId);
 
-    boolean updateJob(JobInputInfoVO jobInfo);
+    Result<Boolean> updateJob(JobInputInfoVO jobInfo);
 
-    List<JobInfoVO> getAllJobInfo();
+    Result<JobInputInfoVO> getJob(int jobId);
 
-    List<JobHistoryVO> getHistoryJob(int jobId);
+    Result<List<JobReturnVO>> getAllJobInfo(int type , int status , String condition , int order);
+
+    Result<List<JobHistoryVO>> getHistoryJob(int jobId);
 
     //获取当前job执行详情
-    List<JobDetailsVO> getJobDetails(int jobId);
+    Result<JobDetailResult> getJobDetails(int jobId, int pageNum, int pageSize);
 
     //获取历史job执行详情
-    List<JobDetailsVO> getJobHistoryDetails(String jobHistoryId);
+    Result<JobDetailResult> getJobHistoryDetails(String jobHistoryId, int pageNum, int pageSize);
 
-    boolean startJob(int jobId);
+    Result<Boolean> startJob(int jobId);
 
-    boolean stopJob(int jobId);
+    Result<Boolean> stopJob(int jobId);
 
-    boolean purge(int jobId);
+    Result<Boolean> purge(int jobId);
 
-    JobInputInfoVO getJob(int jobId);
+    Result<List<SubTaskVO>> getSubTasks(int planHistoryId);
 
     void initSchedule() throws SchedulerException;
 }

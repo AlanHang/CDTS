@@ -53,4 +53,14 @@ public class CEAClusterInfoPO {
     public void setClusterValue(String clusterValue) {
         this.clusterValue = clusterValue;
     }
+
+    @Override
+    public String toString() {
+        return "CEAClusterInfoPO{" +
+                "ceaId=" + ceaId +
+                ", clusterId='" + clusterId + '\'' +
+                ", clusterKey='" + clusterKey + '\'' +
+                ", clusterValue='" + clusterValue + '\'' +
+                '}';
+    }
 }

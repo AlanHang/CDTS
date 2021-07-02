@@ -68,4 +68,13 @@ public class Result<T> {
     public static <T> Result<T> fail(CodeMessage codeMessage) {
         return new Result<T>(codeMessage);
     }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

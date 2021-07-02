@@ -14,7 +14,7 @@ public class CodeMessage {
     private String msg;
 
     // 通用异常
-    public static CodeMessage SUCCESS = new CodeMessage(0,"success");
+    public static CodeMessage SUCCESS = new CodeMessage(200,"success");
     public static CodeMessage SERVER_ERROR = new CodeMessage(500,"服务端异常！");
 
 

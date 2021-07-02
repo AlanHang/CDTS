@@ -2,6 +2,7 @@ package com.bonc.cron.cronTest.jobmanager.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * @create 2021-06-10 11:39
  */
 public class SubTaskVO {
-    private String taskId;
+    private String applicationId;
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -19,9 +20,9 @@ public class SubTaskVO {
     private String executeLog;
     private String speed;
 
-    public SubTaskVO(String taskId, Date startTime, Date endTime, ExecuteCondition condition, int runStatus,
+    public SubTaskVO(String applicationId, Date startTime, Date endTime, ExecuteCondition condition, int runStatus,
                      String executeLog, String speed) {
-        this.taskId = taskId;
+        this.applicationId = applicationId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.condition = condition;
@@ -33,19 +34,12 @@ public class SubTaskVO {
     public SubTaskVO() {
     }
 
-    public SubTaskVO(String taskId) {
-        this.taskId = taskId;
-        this.startTime = new Date();
-        this.endTime = new Date();
-        this.condition = new ExecuteCondition();
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 
     public Date getStartTime() {
@@ -99,9 +93,9 @@ public class SubTaskVO {
     @Override
     public String toString() {
         return "SubTaskVO{" +
-                "taskId='" + taskId + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                "applicationId='" + applicationId + '\'' +
+                ", startTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime) +
+                ", endTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime) +
                 ", condition=" + condition +
                 ", runStatus=" + runStatus +
                 ", executeLog='" + executeLog + '\'' +

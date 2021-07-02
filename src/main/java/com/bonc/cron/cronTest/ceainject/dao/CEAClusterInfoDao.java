@@ -15,9 +15,9 @@ public interface CEAClusterInfoDao {
 
     int addClusterInfo(List<CEAClusterInfoPO> info);
 
-    int deleteClusterInfo(@Param("ceaId") int ceaId, @Param("clusterId") String clusterId);
-
-    int deleteClusterInfoByCEAId(@Param("ceaId") int ceaId);
+//    int deleteClusterInfo(@Param("ceaId") int ceaId, @Param("clusterId") String clusterId);
+//
+//    int deleteClusterInfoByCEAId(@Param("ceaId") int ceaId);
 
     int updateClusterInfo(List<CEAClusterInfoPO> info);
 
