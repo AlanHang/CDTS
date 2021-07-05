@@ -1,7 +1,6 @@
 package com.bonc.cron.cronTest.jobmanager.quartz;
 
 import com.bonc.cron.cronTest.jobmanager.service.JobManagerService;
-import com.bonc.cron.cronTest.test.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -19,7 +18,7 @@ public class ScheduleJobInitListener implements CommandLineRunner {
     JobManagerService jobManagerService;
 
     @Override
-    public void run(String... arg0) throws Exception {
+    public void run(String... arg0){
         try {
             jobManagerService.initSchedule();
         } catch (Exception e) {
