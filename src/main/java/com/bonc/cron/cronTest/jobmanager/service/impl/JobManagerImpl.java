@@ -99,6 +99,7 @@ public class JobManagerImpl implements JobManagerService {
         }
     }
 
+    @Transactional
     @Override
     public Result<Boolean> deleteJob(int jobId) {
         int flag = jobDao.deleteJobInfo(jobId);
@@ -148,13 +149,13 @@ public class JobManagerImpl implements JobManagerService {
 
         flag = jobStrategyDao.updateJobStrategy(strategyList);
         if (flag == 7) {
-//            try {
-//                quartzManager.updateJobCron(jobInfo.getJobId(), cron);
-//            } catch (SchedulerException e) {
-//                log.error("update job cron error:" + e.getMessage());
-//                e.printStackTrace();
-//                return new Result<>(400, "update job cron error:" + e.getMessage(), false);
-//            }
+            try {
+                quartzManager.updateJobCron(jobInfo.getJobId(), cron);
+            } catch (SchedulerException e) {
+                log.error("update job cron error:" + e.getMessage());
+                e.printStackTrace();
+                return new Result<>(400, "update job cron error:" + e.getMessage(), false);
+            }
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
         } else {
             return new Result<>(400, "fail to update jobStrategy into dataBase", false);
@@ -183,13 +184,13 @@ public class JobManagerImpl implements JobManagerService {
             //添加是否忽略失败
             result.setIgnoreFails(Boolean.parseBoolean(strategyMap.get(StrategyKey.IGNORE_FAILS.name())));
             //添加是否采用安全模式
-            result.setIgnoreFails(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_SAFE.name())));
+            result.setSafe(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_SAFE.name())));
             //添加是否冻结集群
-            result.setIgnoreFails(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_FREEZE.name())));
+            result.setFreeze(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_FREEZE.name())));
             //添加失败重试次数
-            result.setSubPlanAmounts(Integer.parseInt(strategyMap.get(StrategyKey.RETRY_COUNT.name())));
+            result.setRetryCount(Integer.parseInt(strategyMap.get(StrategyKey.RETRY_COUNT.name())));
             //添加是否只运行失败任务
-            result.setIgnoreFails(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_RUN_FAILS.name())));
+            result.setRunFails(Boolean.parseBoolean(strategyMap.get(StrategyKey.IS_RUN_FAILS.name())));
 
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), result);
         }

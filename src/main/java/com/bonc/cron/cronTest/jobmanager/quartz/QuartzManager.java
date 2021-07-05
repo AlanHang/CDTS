@@ -77,15 +77,14 @@ public class QuartzManager {
      * @throws SchedulerException
      */
     public void updateJobCron(int jobId, String cron) throws SchedulerException {
-
         TriggerKey triggerKey = TriggerKey.triggerKey(String.valueOf(jobId), "jobManager");
-
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
-
-        trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
-        scheduler.rescheduleJob(triggerKey, trigger);
+        if (trigger != null) {
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+            scheduler.rescheduleJob(triggerKey, trigger);
+        }else {
+            addJob(jobId,cron);
+        }
     }
 }

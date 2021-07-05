@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class CEAServiceImpl implements CEAService {
     @Autowired
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    @Transactional
     @Override
     public Result<Boolean> addCEA(CEAInfoVO info) {
         logger.info("insert ceaInfo info:" + info);
@@ -115,16 +117,20 @@ public class CEAServiceImpl implements CEAService {
         }
     }
 
+    @Transactional
     @Override
     public Result<Boolean> deleteCEA(int ceaId) {
         logger.info("delete ceaInfo info , ceaId = :" + ceaId);
         if (checkClusterUsed(ceaId)) {
             return new Result<>(500, "The cea cluster has been referenced by plan and cannot be deleted", false);
         } else {
-            ceaDao.deleteCEAInfo(ceaId);
+            int flag = ceaDao.deleteCEAInfo(ceaId);
             clusterStatusDao.deleteClusterStatusByCEAId(ceaId);
-//            clusterInfoDao.deleteClusterInfoByCEAId(ceaId);
-            return new Result<>(200, "success", true);
+            if (flag != 0) {
+                return new Result<>(200, "success", true);
+            }else {
+                return new Result<>(400, "fail to delete CEAInfo from database", true);
+            }
         }
     }
 
@@ -139,6 +145,7 @@ public class CEAServiceImpl implements CEAService {
         }
     }
 
+    @Transactional
     @Override
     public Result<Boolean> editCEA(CEAInfoVO info) {
         logger.info("update ceaInfo info:" + info);
@@ -163,6 +170,7 @@ public class CEAServiceImpl implements CEAService {
         }
     }
 
+    @Transactional
     @Override
     public Result<Boolean> refresh(List<Integer> ceaIds) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -248,8 +256,9 @@ public class CEAServiceImpl implements CEAService {
                 fails.append(failCeaId);
                 fails.append(",");
             }
+            fails.deleteCharAt(fails.length()-1);
             fails.append("]");
-            return new Result<>(400, "can't find this CEA" + fails.toString(), true);
+            return new Result<>(400, "can't find this CEA" + fails.toString(), false);
         }
         return new Result<>(200, "success", true);
     }
@@ -258,12 +267,6 @@ public class CEAServiceImpl implements CEAService {
     public Result<List<CEAInfoVO>> getAllCEA() {
         List<CEAInfoPO> ceaInfoPOS = ceaDao.selectAllCEAInfo();
         if (ceaInfoPOS != null && ceaInfoPOS.size() > 0) {
-//            List<CEAInfoVO> results = new ArrayList<>(ceaInfoPOS.size());
-//            for (CEAInfoPO ceaInfoPO : ceaInfoPOS) {
-//                CEAInfoVO ceaInfoVO = new CEAInfoVO();
-//                BeanUtils.copyProperties(ceaInfoPO, ceaInfoVO);
-//                results.add(ceaInfoVO);
-//            }
             List<CEAInfoVO> results = JavaBeanUtil.copyListBean(ceaInfoPOS, CEAInfoVO.class);
             return new Result<>(200, "success", results);
         } else {
