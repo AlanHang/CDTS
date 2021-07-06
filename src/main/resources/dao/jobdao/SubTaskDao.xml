@@ -6,6 +6,9 @@
         SELECT application_id,start_time,end_time,complete_detail,run_status,log,speed
         FROM TASK_HISTORY
         WHERE plan_his_id = #{planHisId}
+        <if test="runStatus != 4">
+            AND run_status = runStatus
+        </if>
     </select>
 
 </mapper>

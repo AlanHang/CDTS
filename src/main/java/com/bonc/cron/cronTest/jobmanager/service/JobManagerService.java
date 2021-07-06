@@ -37,7 +37,7 @@ public interface JobManagerService {
 
     Result<Boolean> purge(int jobId);
 
-    Result<List<SubTaskVO>> getSubTasks(int planHistoryId);
+    Result<List<SubTaskVO>> getSubTasks(int planHistoryId,int runStatus);
 
     void initSchedule() throws SchedulerException;
 }

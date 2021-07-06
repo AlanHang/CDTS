@@ -55,6 +55,11 @@ public class JobInfoPO {
         this.jobQueueName = jobQueueName;
     }
 
+    public JobInfoPO(Integer jobId, Integer jobStatus) {
+        this.jobId = jobId;
+        this.jobStatus = jobStatus;
+    }
+
     public Integer getJobId() {
         return jobId;
     }

@@ -13,5 +13,5 @@ import java.util.List;
 @Mapper
 public interface SubTaskDao {
 
-    List<SubTaskPO> selectSubTasks(@Param("planHisId") int planHisId);
+    List<SubTaskPO> selectSubTasks(@Param("planHisId") int planHisId, @Param("runStatus") int runStatus);
 }

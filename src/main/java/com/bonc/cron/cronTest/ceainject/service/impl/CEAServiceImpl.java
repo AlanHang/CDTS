@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,6 +105,7 @@ public class CEAServiceImpl implements CEAService {
         } catch (IOException e) {
             e.printStackTrace();
             logger.error("addCEA ERROR :" + e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result<>(400, "addCEA ERROR : CEA address is invalid ," + e.getMessage(), false);
         } finally {
             try {
@@ -165,6 +167,7 @@ public class CEAServiceImpl implements CEAService {
             if (result.getCode() == 200) {
                 return addCEA(info);
             } else {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return result;
             }
         }

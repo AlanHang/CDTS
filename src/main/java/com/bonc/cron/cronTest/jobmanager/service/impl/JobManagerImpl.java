@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -91,10 +92,12 @@ public class JobManagerImpl implements JobManagerService {
             } catch (SchedulerException e) {
                 log.error("add job to quartz error:" + e.getMessage());
                 e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return new Result<>(400, "add job to quartz error:" + e.getMessage(), false);
             }
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
         } else {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result<>(400, "fail to add jobStrategy into dataBase", false);
         }
     }
@@ -110,6 +113,7 @@ public class JobManagerImpl implements JobManagerService {
             } catch (SchedulerException e) {
                 log.error("delete job to quartz error:" + e.getMessage());
                 e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return new Result<>(400, "delete job to quartz error:" + e.getMessage(), false);
             }
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
@@ -154,6 +158,7 @@ public class JobManagerImpl implements JobManagerService {
             } catch (SchedulerException e) {
                 log.error("update job cron error:" + e.getMessage());
                 e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return new Result<>(400, "update job cron error:" + e.getMessage(), false);
             }
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
@@ -197,8 +202,8 @@ public class JobManagerImpl implements JobManagerService {
     }
 
     @Override
-    public Result<List<JobReturnVO>> getAllJobInfo(int type , int status , String condition , int order) {
-        List<JobReturnPO> jobReturnPOS = jobDao.selectAllReturnJobInfo(type,status,condition,order);
+    public Result<List<JobReturnVO>> getAllJobInfo(int type, int status, String condition, int order) {
+        List<JobReturnPO> jobReturnPOS = jobDao.selectAllReturnJobInfo(type, status, condition, order);
         if (jobReturnPOS == null || jobReturnPOS.size() == 0) {
             return new Result<>(400, "fail to find jobInfo", null);
         } else {
@@ -255,19 +260,19 @@ public class JobManagerImpl implements JobManagerService {
                 return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), null);
             }
             result.setPlans(planVOS);
-            PageHelper.startPage(pageNum,pageSize);
-            List<SubTaskVO> subTaskResult = getSubTasks(planVOS.get(0).getPlanHisId()).getData();
+            PageHelper.startPage(pageNum, pageSize);
+            List<SubTaskVO> subTaskResult = getSubTasks(planVOS.get(0).getPlanHisId(), 4).getData();
             PageInfo<SubTaskVO> resultPageInfo = new PageInfo<>(subTaskResult);
             PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
             result.setTasks(pageResult.getContent());
-            JobDetailResult resultAfterPage = new JobDetailResult(pageResult.getPageNum(),pageResult.getPageSize(),pageResult.getTotalSize(),
-                    pageResult.getTotalPages(),result);
+            JobDetailResult resultAfterPage = new JobDetailResult(pageResult.getPageNum(), pageResult.getPageSize(), pageResult.getTotalSize(),
+                    pageResult.getTotalPages(), result);
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), resultAfterPage);
         }
     }
 
     @Override
-    public Result<JobDetailResult> getJobHistoryDetails(String jobHistoryId , int pageNum, int pageSize) {
+    public Result<JobDetailResult> getJobHistoryDetails(String jobHistoryId, int pageNum, int pageSize) {
         JobDetailsVO result = new JobDetailsVO();
         result.setHistoryId(jobHistoryId);
         List<PlanVO> planVOS = jobDetailsDao.selectPlanQueue(jobHistoryId);
@@ -275,22 +280,22 @@ public class JobManagerImpl implements JobManagerService {
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), null);
         }
         result.setPlans(planVOS);
-        PageHelper.startPage(pageNum,pageSize);
-        List<SubTaskVO> subTaskResult = getSubTasks(planVOS.get(0).getPlanHisId()).getData();
+        PageHelper.startPage(pageNum, pageSize);
+        List<SubTaskVO> subTaskResult = getSubTasks(planVOS.get(0).getPlanHisId(), 4).getData();
         PageInfo<SubTaskVO> resultPageInfo = new PageInfo<>(subTaskResult);
         PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
         result.setTasks(pageResult.getContent());
-        JobDetailResult resultAfterPage = new JobDetailResult(pageResult.getPageNum(),pageResult.getPageSize(),pageResult.getTotalSize(),
-                pageResult.getTotalPages(),result);
+        JobDetailResult resultAfterPage = new JobDetailResult(pageResult.getPageNum(), pageResult.getPageSize(), pageResult.getTotalSize(),
+                pageResult.getTotalPages(), result);
         return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), resultAfterPage);
     }
 
     @Override
-    public Result<List<SubTaskVO>> getSubTasks(int planHistoryId) {
-        List<SubTaskPO> subTaskPOS = subTaskDao.selectSubTasks(planHistoryId);
+    public Result<List<SubTaskVO>> getSubTasks(int planHistoryId, int runStatus) {
+        List<SubTaskPO> subTaskPOS = subTaskDao.selectSubTasks(planHistoryId, runStatus);
         List<SubTaskVO> subTaskResult = new ArrayList<>(subTaskPOS.size());
         for (SubTaskPO subTaskPO : subTaskPOS) {
-            SubTaskVO subTaskVO = JavaBeanUtil.copyBean(subTaskPO,SubTaskVO.class);
+            SubTaskVO subTaskVO = JavaBeanUtil.copyBean(subTaskPO, SubTaskVO.class);
             if (subTaskPO.getCompleteDetail() != null) {
                 JSONObject completeDetail = JSONObject.parseObject(subTaskPO.getCompleteDetail());
                 subTaskVO.setCondition(new ExecuteCondition(completeDetail.getInteger("all_count"),
@@ -299,9 +304,10 @@ public class JobManagerImpl implements JobManagerService {
             }
             subTaskResult.add(subTaskVO);
         }
-        return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(),subTaskResult);
+        return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), subTaskResult);
     }
 
+    @Transactional
     @Override
     public Result<Boolean> startJob(int jobId) {
         try {
@@ -311,9 +317,15 @@ public class JobManagerImpl implements JobManagerService {
             e.printStackTrace();
             return new Result<>(400, "start job error:" + e.getMessage(), false);
         }
-        return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
+        int flag = jobDao.updateJobInfo(new JobInfoPO(jobId,1));
+        if (flag > 0) {
+            return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
+        } else {
+            return new Result<>(400, "start job error: fail to start job", false);
+        }
     }
 
+    @Transactional
     @Override
     public Result<Boolean> stopJob(int jobId) {
         try {
@@ -323,7 +335,12 @@ public class JobManagerImpl implements JobManagerService {
             e.printStackTrace();
             return new Result<>(400, "stop job error:" + e.getMessage(), false);
         }
-        return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
+        int flag = jobDao.updateJobInfo(new JobInfoPO(jobId,0));
+        if (flag > 0) {
+            return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), true);
+        } else {
+            return new Result<>(400, "stop job error: fail to stop job", false);
+        }
     }
 
     @Override
@@ -333,12 +350,17 @@ public class JobManagerImpl implements JobManagerService {
 
 
     @Override
-    public void initSchedule() throws SchedulerException {
+    public void initSchedule() {
         List<JobInfoPO> jobInfoPOS = jobDao.selectAllJobInfo();
         for (JobInfoPO jobInfoPO : jobInfoPOS) {
             if (jobInfoPO.getJobStatus() == 1) {
                 String cron = jobStrategyDao.selectOneJobStrategy(jobInfoPO.getJobId(), StrategyKey.PLAN_CYCLETIMES.name());
-                quartzManager.addJob(jobInfoPO.getJobId(), cron);
+                try {
+                    quartzManager.addJob(jobInfoPO.getJobId(), cron);
+                } catch (SchedulerException e) {
+                    e.printStackTrace();
+                    log.error("init quartz error:" + e.getMessage());
+                }
             }
         }
     }
