@@ -238,8 +238,8 @@ public class JobManagerImpl implements JobManagerService {
                     jobHistoryVO.setCondition(new ExecuteCondition(completeDetail.getInteger("all_count"),
                             completeDetail.getInteger("success_count") + completeDetail.getInteger("error_count"),
                             completeDetail.getInteger("success_count"), completeDetail.getInteger("error_count")));
-                    result.add(jobHistoryVO);
                 }
+                result.add(jobHistoryVO);
             }
             return new Result<>(CodeMessage.SUCCESS.getCode(), CodeMessage.SUCCESS.getMsg(), result);
         } else {

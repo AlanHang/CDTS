@@ -31,9 +31,8 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Boot中使用Swagger2构建RESTful APIs")
-                .description("更多Spring Boot相关文章请关注：http://blog.didispace.com/")
-                .termsOfServiceUrl("http://blog.didispace.com/")
+                .title("CDTS_数据迁移模块接口")
+                .description("CDTS_数据迁移模块接口清单")
                 .version("1.0")
                 .build();
     }

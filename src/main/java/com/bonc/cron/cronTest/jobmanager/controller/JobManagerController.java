@@ -69,9 +69,13 @@ public class JobManagerController {
     Result<PageResult<JobReturnVO>> getAllJobInfo(int type , int status , String condition , int order , int pageNum , int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         Result<List<JobReturnVO>> allJobInfo = jobManagerService.getAllJobInfo(type, status, condition, order);
-        PageInfo<JobReturnVO> resultPageInfo = new PageInfo<>(allJobInfo.getData());
-        PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
-        return new Result<>(allJobInfo.getCode(),allJobInfo.getMsg(),pageResult);
+        if (allJobInfo.getCode() == 200) {
+            PageInfo<JobReturnVO> resultPageInfo = new PageInfo<>(allJobInfo.getData());
+            PageResult pageResult = PageUtils.getPageResult(resultPageInfo);
+            return new Result<>(allJobInfo.getCode(), allJobInfo.getMsg(), pageResult);
+        }else {
+            return new Result<>(allJobInfo.getCode(), allJobInfo.getMsg(),null);
+        }
     }
 
     @ApiOperation(value = "查询job历史信息的接口", notes="获取所有的job执行的历史信息")

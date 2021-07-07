@@ -7,7 +7,7 @@
         FROM TASK_HISTORY
         WHERE plan_his_id = #{planHisId}
         <if test="runStatus != 4">
-            AND run_status = runStatus
+            AND run_status = #{runStatus}
         </if>
     </select>
 
